@@ -10,6 +10,8 @@ import {
 } from "./ui/table";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import DeleteButton from "./DeleteButton";
+import TableHeadClient from "./TableHeadClient";
 
 export default function AdminTable({ data }: { data: Complaint[] }) {
   const rawKeys = Object.keys(data[0]);
@@ -18,12 +20,8 @@ export default function AdminTable({ data }: { data: Complaint[] }) {
     <Table>
       <TableHeader className="bg-black">
         <TableRow className="hover:bg-black">
-          {keys.map((key) => (
-            <TableHead className="text-white" key={key}>
-              {key}
-            </TableHead>
-          ))}
-          <TableHead></TableHead>
+          <TableHeadClient keys={keys} />
+          <TableHead className="text-white text-center">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -71,6 +69,7 @@ export default function AdminTable({ data }: { data: Complaint[] }) {
                   Edit
                 </Button>
               </Link>
+              <DeleteButton id={complaint._id} />
             </TableCell>
           </TableRow>
         ))}
