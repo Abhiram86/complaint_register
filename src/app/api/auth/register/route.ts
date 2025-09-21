@@ -8,7 +8,13 @@ import { cookies } from "next/headers";
 export async function POST(req: Request) {
   await connectDB();
   try {
-    const { username, email, password } = await req.json();
+    const body = await req.json();
+    const { registerSchema } = await import("@/lib/formSchemas");
+    const parsed = registerSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error }, { status: 400 });
+    }
+    const { username, email, password } = parsed.data;
     const existing = await User.findOne({ $or: [{ email }, { username }] });
     if (existing) {
       return NextResponse.json(

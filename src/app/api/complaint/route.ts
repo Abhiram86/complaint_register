@@ -17,8 +17,13 @@ export async function POST(req: Request) {
   }
   try {
     const body = await req.json();
+    const { complaintSchema } = await import("@/lib/formSchemas");
+    const parsed = complaintSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error }, { status: 400 });
+    }
     const complaint = new Complaint({
-      ...body,
+      ...parsed.data,
       user: new mongoose.Types.ObjectId(decoded.id),
     });
     await complaint.save();

@@ -2,6 +2,11 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  categories,
+  complaintSchema as formSchema,
+  priorities,
+} from "@/lib/formSchemas";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,22 +14,6 @@ import { Textarea } from "../ui/textarea";
 import { SelectList } from "../SelectList";
 import { RadioList } from "../RadioList";
 import { useRouter } from "next/navigation";
-
-const categories = ["Product", "Service", "Support", "Security", "Other"];
-const priorities = ["Low", "Medium", "High"];
-
-export const formSchema = z.object({
-  title: z.string().min(3, {
-    message: "Title is required.",
-  }),
-  description: z.string().min(4, {
-    message: "Description is required.",
-  }),
-  category: z
-    .enum(categories, "A category is must be selected")
-    .default("Product"),
-  priority: z.enum(priorities, "A priority is must be selected").default("Low"),
-});
 
 export function ComplaintForm() {
   const router = useRouter();

@@ -2,21 +2,13 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema as formSchema } from "@/lib/formSchemas";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user";
-
-const formSchema = z.object({
-  email: z.email({
-    message: "Please enter a valid email.",
-  }),
-  password: z.string().min(1, {
-    message: "Password is required.",
-  }),
-});
 
 export function LoginForm() {
   const router = useRouter();
