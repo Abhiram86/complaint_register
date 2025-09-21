@@ -6,39 +6,52 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
+import { SelectList } from "../SelectList";
+import { RadioList } from "../RadioList";
+import { useRouter } from "next/navigation";
 
-const formSchema = z.object({
-  title: z.string().min(1, {
+const categories = ["Product", "Service", "Support", "Security", "Other"];
+const priorities = ["Low", "Medium", "High"];
+
+export const formSchema = z.object({
+  title: z.string().min(3, {
     message: "Title is required.",
   }),
-  description: z.string().min(1, {
+  description: z.string().min(4, {
     message: "Description is required.",
   }),
-  category: z.string().min(1, {
-    message: "Category is required.",
-  }),
-  priority: z.string().min(1, {
-    message: "Priority is required.",
-  }),
+  category: z
+    .enum(categories, "A category is must be selected")
+    .default("Product"),
+  priority: z.enum(priorities, "A priority is must be selected").default("Low"),
 });
 
 export function ComplaintForm() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
-      category: "",
-      priority: "",
+      category: "Product",
+      priority: "Low",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const res = await fetch("/api/complaint", {
+      method: "POST",
+      body: JSON.stringify(values),
+    });
+    if (res.ok) {
+      alert("Complaint submitted successfully");
+      router.push("/");
+    }
   }
 
   return (
@@ -49,7 +62,8 @@ export function ComplaintForm() {
       <div>
         <h1 className="text-lg font-semibold">Create a new Complaint</h1>
         <p className="text-zinc-400 text-xs font-normal">
-          Fill the form to create a new complaint
+          Fill the form completely to create a new Complaint, every field is
+          required
         </p>
       </div>
       <div className="flex flex-col gap-1">
@@ -65,7 +79,12 @@ export function ComplaintForm() {
         <label className="font-medium" htmlFor="category">
           Category
         </label>
-        <Input type="text" id="category" {...register("category")} />
+        <SelectList
+          name="category"
+          control={control}
+          title="Category"
+          data={categories}
+        />
         {errors.category && (
           <p className="text-red-500 text-xs">{errors.category.message}</p>
         )}
@@ -74,7 +93,7 @@ export function ComplaintForm() {
         <label className="font-medium" htmlFor="priority">
           Priority
         </label>
-        <Input type="text" id="priority" {...register("priority")} />
+        <RadioList control={control} name="priority" data={priorities} />
         {errors.priority && (
           <p className="text-red-500 text-xs">{errors.priority.message}</p>
         )}
