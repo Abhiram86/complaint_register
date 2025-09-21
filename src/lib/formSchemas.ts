@@ -1,6 +1,12 @@
 import { z } from "zod";
 
-export const categories = ["Product", "Service", "Support", "Security", "Other"];
+export const categories = [
+  "Product",
+  "Service",
+  "Support",
+  "Security",
+  "Other",
+];
 export const priorities = ["Low", "Medium", "High"];
 
 export const complaintSchema = z.object({
@@ -20,6 +26,10 @@ export const complaintSchema = z.object({
       errorMap: () => ({ message: "A priority must be selected" }),
     })
     .default("Low"),
+});
+
+export const adminComplaintSchema = complaintSchema.extend({
+  status: z.enum(["Pending", "In Progress", "Resolved"]).default("Pending"),
 });
 
 export const loginSchema = z.object({
