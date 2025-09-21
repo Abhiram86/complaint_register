@@ -3,8 +3,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  adminComplaintSchema,
   categories,
-  complaintSchema as formSchema,
+  complaintSchema,
   priorities,
 } from "@/lib/formSchemas";
 import { z } from "zod";
@@ -15,7 +16,22 @@ import { SelectList } from "../SelectList";
 import { RadioList } from "../RadioList";
 import { useRouter } from "next/navigation";
 
-export function ComplaintForm() {
+export function ComplaintForm({
+  defaultValues,
+  isAdmin = false,
+  onSubmit,
+}: {
+  defaultValues?:
+    | z.infer<typeof complaintSchema>
+    | z.infer<typeof adminComplaintSchema>;
+  isAdmin?: boolean;
+  onSubmit?: (
+    values:
+      | z.infer<typeof complaintSchema>
+      | z.infer<typeof adminComplaintSchema>
+  ) => void;
+}) {
+  const formSchema = isAdmin ? adminComplaintSchema : complaintSchema;
   const router = useRouter();
   const {
     register,
@@ -24,24 +40,14 @@ export function ComplaintForm() {
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: defaultValues ?? {
       title: "",
       description: "",
       category: "Product",
       priority: "Low",
+      ...(isAdmin && { status: "Pending" }),
     },
   });
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const res = await fetch("/api/complaint", {
-      method: "POST",
-      body: JSON.stringify(values),
-    });
-    if (res.ok) {
-      alert("Complaint submitted successfully");
-      router.push("/");
-    }
-  }
 
   return (
     <form
@@ -87,6 +93,22 @@ export function ComplaintForm() {
           <p className="text-red-500 text-xs">{errors.priority.message}</p>
         )}
       </div>
+      {isAdmin && (
+        <div className="flex flex-col gap-1">
+          <label className="font-medium" htmlFor="status">
+            Status
+          </label>
+          <SelectList
+            title="Status"
+            control={control}
+            name="status"
+            data={["Pending", "In Progress", "Resolved"]}
+          />
+          {errors.status && (
+            <p className="text-red-500 text-xs">{errors.status.message}</p>
+          )}
+        </div>
+      )}
       <div className="flex flex-col gap-1">
         <label className="font-medium" htmlFor="description">
           Description

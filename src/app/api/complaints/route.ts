@@ -5,6 +5,33 @@ import mongoose from "mongoose";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+export async function GET(req: Request) {
+  await connectDB();
+  const token = (await cookies()).get("token")?.value;
+  if (!token) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const decoded = verifyToken(token!);
+  if (!decoded) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (decoded.role !== "admin") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+  try {
+    const complaints = await Complaint.find()
+      .populate("user", "_id username")
+      .sort({ dateSubmitted: -1 });
+    return NextResponse.json({ complaints }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { error: "Error fetching complaints" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(req: Request) {
   await connectDB();
   const token = (await cookies()).get("token")?.value;

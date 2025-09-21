@@ -4,7 +4,7 @@ interface Complaint {
   title: string;
   description: string;
   category: "Product" | "Service" | "Support" | "Security" | "Other";
-  priority: string;
+  priority: "Low" | "Medium" | "High";
   status: "Pending" | "In Progress" | "Resolved";
   user: mongoose.Types.ObjectId;
   dateSubmitted: Date;
@@ -18,7 +18,7 @@ const complaintSchema = new mongoose.Schema<Complaint>({
     enum: ["Product", "Service", "Support", "Security", "Other"],
     required: true,
   },
-  priority: { type: String, required: true },
+  priority: { type: String, enum: ["Low", "Medium", "High"], required: true },
   status: {
     type: String,
     enum: ["Pending", "In Progress", "Resolved"],
