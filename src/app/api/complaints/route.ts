@@ -3,9 +3,9 @@ import { verifyToken } from "@/lib/verifyToken";
 import { Complaint } from "@/models/Complaint";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   await connectDB();
   const token = (await cookies()).get("token")?.value;
   if (!token) {
@@ -19,9 +19,17 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
   try {
+    const sortBy = req.nextUrl.searchParams.get("sortBy");
+    const order = req.nextUrl.searchParams.get("order");
+
+    const ordered = order ? (order === "asc" ? 1 : -1) : -1;
+    const sortObj = {
+      [sortBy || "dateSubmitted"]: ordered,
+    };
+
     const complaints = await Complaint.find()
       .populate("user", "_id username")
-      .sort({ dateSubmitted: -1 });
+      .sort(sortObj as any);
     return NextResponse.json({ complaints }, { status: 200 });
   } catch (error) {
     console.log(error);

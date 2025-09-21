@@ -28,6 +28,7 @@ export default async function Dashboard({
     ).toString()}`}`,
     {
       headers: await headers(),
+      next: { tags: ["complaints"] },
     }
   );
   if (res.status === 401) redirect("/login");

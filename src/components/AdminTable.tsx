@@ -60,7 +60,7 @@ export default function AdminTable({ data }: { data: Complaint[] }) {
             <TableCell>
               {new Date(complaint.dateSubmitted).toLocaleString()}
             </TableCell>
-            <TableCell>
+            <TableCell className="flex">
               <Link href={`/dashboard/${complaint._id}`}>
                 <Button
                   className="hover:bg-black hover:text-white"

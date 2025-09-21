@@ -7,7 +7,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 export default function TableHeadClient({ keys }: { keys: string[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const sort = searchParams.get("sort");
   const order = searchParams.get("order");
   const isActionKey = (key: string) => {
     return key === "priority" || key === "status" || key === "dateSubmitted";
@@ -20,7 +19,7 @@ export default function TableHeadClient({ keys }: { keys: string[] }) {
       onClick={() =>
         isActionKey(key) &&
         router.push(
-          `/dashboard?sort=${key}&order=${order === "asc" ? "desc" : "asc"}`
+          `/dashboard?sortBy=${key}&order=${order === "asc" ? "desc" : "asc"}`
         )
       }
       key={key}
