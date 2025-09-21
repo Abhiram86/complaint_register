@@ -37,6 +37,17 @@ export async function GET(req: NextRequest) {
 
     const pipeline = [
       {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$user",
+      },
+      {
         $addFields: {
           priorityScore: {
             $toInt: {
