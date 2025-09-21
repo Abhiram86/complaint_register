@@ -1,9 +1,11 @@
 import connectDB from "@/lib/mongodb";
 import { verifyToken } from "@/lib/verifyToken";
 import { Complaint } from "@/models/Complaint";
+import { User } from "@/models/User";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 export async function GET(
   req: Request,
@@ -58,15 +60,40 @@ export async function PATCH(
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
-    const complaint = await Complaint.updateOne(
-      { _id: new mongoose.Types.ObjectId(id) },
-      { $set: parsed.data }
-    );
-    if (!complaint) {
+    const prev = await Complaint.findById(new mongoose.Types.ObjectId(id), {
+      status: 1,
+    });
+    if (!prev) {
       return NextResponse.json(
         { error: "Complaint not found" },
         { status: 404 }
       );
+    }
+    const complaint = await Complaint.updateOne(
+      { _id: new mongoose.Types.ObjectId(id) },
+      { $set: parsed.data }
+    );
+    if (prev.status !== parsed.data.status) {
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      });
+
+      const admins = await User.find({ role: "admin" });
+
+      const { statusUpdateMailTemplate } = await import("@/lib/mailTemplates");
+
+      for (const admin of admins) {
+        await transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: admin.email,
+          subject: "New complaint submitted",
+          html: statusUpdateMailTemplate(parsed.data),
+        });
+      }
     }
     return NextResponse.json(
       { message: "Complaint updated successfully" },

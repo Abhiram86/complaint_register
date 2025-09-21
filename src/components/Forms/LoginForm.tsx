@@ -33,7 +33,7 @@ export function LoginForm() {
     if (res.ok) {
       const data = await res.json();
       setUser(data.user);
-      router.push("/dashboard");
+      router.push("/");
     }
   }
 

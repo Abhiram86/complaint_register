@@ -1,9 +1,11 @@
 import connectDB from "@/lib/mongodb";
 import { verifyToken } from "@/lib/verifyToken";
 import { Complaint } from "@/models/Complaint";
+import { User } from "@/models/User";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 const priorityOrder = {
   Low: 1,
@@ -117,6 +119,28 @@ export async function POST(req: Request) {
       user: new mongoose.Types.ObjectId(decoded.id),
     });
     await complaint.save();
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const admins = await User.find({ role: "admin" });
+
+    const { newComplainMailTemplate } = await import("@/lib/mailTemplates");
+
+    for (const admin of admins) {
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: admin.email,
+        subject: "New complaint submitted",
+        html: newComplainMailTemplate(complaint),
+      });
+    }
+
     return NextResponse.json(
       { message: "Complaint submitted successfully" },
       { status: 201 }
