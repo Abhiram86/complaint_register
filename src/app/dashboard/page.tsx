@@ -1,5 +1,5 @@
 import AdminTable from "@/components/AdminTable";
-import { headers } from "next/headers";
+// import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export interface Complaint {
@@ -27,7 +27,7 @@ export default async function Dashboard({
       filters
     ).toString()}`}`,
     {
-      headers: await headers(),
+      credentials: "include",
       next: { tags: ["complaints"] },
     }
   );

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { Complaint } from "../page";
-import { headers } from "next/headers";
+// import { headers } from "next/headers";
 import EditForm from "@/components/Forms/EditForm";
 
 export default async function Edit({
@@ -12,7 +12,7 @@ export default async function Edit({
   const res = await fetch(
     `https://complaint-register-jet.vercel.app/api/complaints/${param.id}`,
     {
-      headers: await headers(),
+      credentials: "include",
     }
   );
   if (res.status === 401) redirect("/login");
