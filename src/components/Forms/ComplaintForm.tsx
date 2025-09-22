@@ -109,6 +109,7 @@ export function ComplaintForm({
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {(errors as any).status && (
             <p className="text-red-500 text-xs">
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {(errors as any).status.message}
             </p>
           )}
