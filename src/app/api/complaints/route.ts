@@ -3,7 +3,7 @@ import { verifyToken } from "@/lib/verifyToken";
 import { Complaint } from "@/models/Complaint";
 import { User } from "@/models/User";
 import mongoose from "mongoose";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
@@ -21,7 +21,8 @@ const statusOrder = {
 
 export async function GET(req: NextRequest) {
   await connectDB();
-  const token = (await cookies()).get("token")?.value;
+  console.log("headers", (await headers()).get("authorization"));
+  const token = (await headers()).get("authorization")?.split(" ")[1];
   if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

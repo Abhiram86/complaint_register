@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Complaint } from "../page";
-// import { headers } from "next/headers";
 import EditForm from "@/components/Forms/EditForm";
+import { cookies } from "next/headers";
 
 export default async function Edit({
   params,
@@ -9,10 +9,11 @@ export default async function Edit({
   params: Promise<{ id: string }>;
 }) {
   const param = await params;
+  const token = (await cookies()).get("token")?.value;
   const res = await fetch(
     `https://complaint-register-jet.vercel.app/api/complaints/${param.id}`,
     {
-      credentials: "include",
+      headers: { Authorization: `Bearer ${token}` },
     }
   );
   if (res.status === 401) redirect("/login");

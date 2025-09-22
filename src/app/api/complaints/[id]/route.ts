@@ -3,7 +3,7 @@ import { verifyToken } from "@/lib/verifyToken";
 import { Complaint } from "@/models/Complaint";
 import { User } from "@/models/User";
 import mongoose from "mongoose";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
@@ -13,7 +13,7 @@ export async function GET(
 ) {
   const { id } = await params;
   await connectDB();
-  const token = (await cookies()).get("token")?.value;
+  const token = (await headers()).get("authorization")?.split(" ")[1];
   if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

@@ -1,5 +1,5 @@
 import AdminTable from "@/components/AdminTable";
-// import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export interface Complaint {
@@ -22,12 +22,13 @@ export default async function Dashboard({
   searchParams: Promise<{ [key: string]: string }>;
 }) {
   const filters = await searchParams;
+  const token = (await cookies()).get("token")?.value;
   const res = await fetch(
     `https://complaint-register-jet.vercel.app/api/complaints${`?${new URLSearchParams(
       filters
     ).toString()}`}`,
     {
-      credentials: "include",
+      headers: { Authorization: `Bearer ${token}` },
       next: { tags: ["complaints"] },
     }
   );
