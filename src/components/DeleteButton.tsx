@@ -1,9 +1,8 @@
 "use client";
 import { handleDeleteComplaint } from "@/actions/dashboard";
-import { Button } from "./ui/button";
 import { useState } from "react";
-import { LoaderCircle } from "lucide-react";
 import SubmitButton from "./SubmitButton";
+import { toast } from "sonner";
 
 export default function DeleteButton({ id }: { id: string }) {
   const [loading, setLoading] = useState(false);
@@ -11,8 +10,14 @@ export default function DeleteButton({ id }: { id: string }) {
     setLoading(true);
     try {
       await handleDeleteComplaint(id);
+      toast("Complaint deleted successfully", {
+        position: "top-center",
+      });
     } catch (error) {
       console.error(error);
+      toast("Something went wrong", {
+        position: "top-center",
+      });
     } finally {
       setLoading(false);
     }
@@ -22,6 +27,7 @@ export default function DeleteButton({ id }: { id: string }) {
       <SubmitButton
         className="hover:bg-red-500 hover:text-white"
         text="Delete"
+        variant="ghost"
         loading={loading}
       />
     </form>

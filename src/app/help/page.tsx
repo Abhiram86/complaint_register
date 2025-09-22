@@ -3,6 +3,7 @@
 import { ComplaintForm } from "@/components/Forms/ComplaintForm";
 import { complaintSchema } from "@/lib/formSchemas";
 import { useState } from "react";
+import { toast } from "sonner";
 import z from "zod";
 
 export default function Help() {
@@ -15,10 +16,19 @@ export default function Help() {
         body: JSON.stringify(values),
       });
       if (res.ok) {
-        alert("Complaint submitted successfully");
+        toast("Complaint submitted successfully", {
+          position: "top-center",
+        });
+      } else {
+        toast("Something went wrong", {
+          position: "top-center",
+        });
       }
     } catch (error) {
       console.error(error);
+      toast("Something went wrong", {
+        position: "top-center",
+      });
     } finally {
       setLoading(false);
     }

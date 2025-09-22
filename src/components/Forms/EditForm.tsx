@@ -6,6 +6,7 @@ import { complaintSchema } from "@/lib/formSchemas";
 import z from "zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function EditForm({ data }: { data: Complaint }) {
   const router = useRouter();
@@ -18,11 +19,20 @@ export default function EditForm({ data }: { data: Complaint }) {
         body: JSON.stringify(values),
       });
       if (res.ok) {
-        alert("Complaint updated successfully");
+        toast("Complaint updated successfully", {
+          position: "top-center",
+        });
         router.push("/dashboard");
+      } else {
+        toast("Something went wrong", {
+          position: "top-center",
+        });
       }
     } catch (error) {
       console.error(error);
+      toast("Something went wrong", {
+        position: "top-center",
+      });
     } finally {
       setLoading(false);
     }

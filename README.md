@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Got it ✅ — here’s a clean **README.md** you can copy–paste and adjust with your repo/project name:
 
-## Getting Started
+---
 
-First, run the development server:
+# 📝 Complaint Management System
+
+A full-stack **Next.js (TypeScript)** application that allows users to submit complaints and administrators to manage them.
+Built with **MongoDB (Atlas)** for storage and **Nodemailer** for email notifications.
+
+---
+
+## 🚀 Features
+
+- **User side**
+
+  - Submit complaints with **Title, Description, Category, Priority**.
+
+- **Admin side**
+
+  - View all complaints in a table.
+  - Filter by **status** or **priority**.
+  - Update complaint status (**Pending → In Progress → Resolved**).
+  - Delete complaints.
+
+- **Emails**
+
+  - Admin receives an email when a **new complaint** is submitted.
+  - Admin receives an email when a **complaint status is updated**.
+
+- **Responsive UI** (Tailwind CSS).
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend & Backend**: Next.js (TypeScript)
+- **Database**: MongoDB (Atlas) via Mongoose
+- **Emails**: Nodemailer (Gmail SMTP / any SMTP provider)
+- **Styling**: Tailwind CSS
+- **Auth (Optional)**: JWT for securing routes
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1️⃣ Clone the repo
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Abhiram86/complaint_register.git
+cd complaint_register
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2️⃣ Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3️⃣ Configure environment variables
 
-## Learn More
+Create a `.env` file in the root:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+MONGODB_URI=your_mongodb_connection_string
+EMAIL_USER=your_email@example.com
+EMAIL_PASS=your_email_app_password
+ADMIN_EMAIL=admin@example.com
+JWT_SECRET=your_secret_key
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4️⃣ Run locally
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+App runs at 👉 [http://localhost:3000](http://localhost:3000)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📌 How to Use
+
+### User Flow
+
+1. Open the app → Fill out **Complaint Form** with Title, Description, Category, Priority.
+2. Submit → Complaint is saved in MongoDB.
+3. Admin receives an **email notification** with details.
+
+### Admin Flow
+
+1. Navigate to **Admin Dashboard**.
+2. View all complaints in a table.
+3. Filter by status/priority to manage easily.
+4. Update a complaint’s status or delete it.
+5. On status update, an **email is sent** confirming the update.
+
+---
+
+## 📷 Screenshots
+
+### 1. Login Form
+
+<img src="./media/login.png" alt="Login Form" width="600"/>  
+Simple login form for admin access to the dashboard.
+
+---
+
+### 2. Complaint Form (with success message)
+
+<img src="./media/form.png" alt="Complaint Form" width="600"/>  
+User fills in **Title, Description, Category, Priority** and submits a complaint.  
+A success message confirms that the complaint was submitted.
+
+---
+
+### 3. Email Notification to Admin
+
+<img src="./media/mail.png" alt="Email Notification" width="600"/>  
+Admin receives an HTML-styled email with complaint details upon submission.
+
+---
+
+### 4. Admin Dashboard (Complaints Table)
+
+<img src="./media/table.png" alt="Admin Dashboard Table" width="600"/>  
+Admin dashboard showing all complaints in a table with options to filter, update status, or delete complaints.
+
+---
+
+## 🌍 Deployment
+
+You can deploy on:
+
+- **Frontend**: [Vercel](#)
+
+---
+
+## ✅ Deliverables Checklist
+
+- [x] CRUD operations with MongoDB
+- [x] Email notifications (new + update)
+- [x] Clean and responsive UI
+- [x] Git workflow with commits, branches, PRs
+- [x] JWT authentication (optional)
+- [?] Live deployment link
+
+---

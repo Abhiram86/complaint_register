@@ -1,6 +1,7 @@
 import AdminTable from "@/components/AdminTable";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 export interface Complaint {
   _id: string;
@@ -33,7 +34,6 @@ export default async function Dashboard({
   );
   if (res.status === 401) redirect("/login");
   if (res.status === 403) {
-    alert("You are not authorized to view this page");
     redirect("/");
   }
   if (!res.ok) throw new Error("Failed to fetch data");
