@@ -14,17 +14,19 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import { SelectList } from "../SelectList";
 import { RadioList } from "../RadioList";
-import { useRouter } from "next/navigation";
+import SubmitButton from "../SubmitButton";
 
 export function ComplaintForm({
   defaultValues,
   isAdmin = false,
+  loading,
   onSubmit,
 }: {
   defaultValues?:
     | z.infer<typeof complaintSchema>
     | z.infer<typeof adminComplaintSchema>;
   isAdmin?: boolean;
+  loading: boolean;
   onSubmit?: (
     values:
       | z.infer<typeof complaintSchema>
@@ -32,13 +34,13 @@ export function ComplaintForm({
   ) => void;
 }) {
   const formSchema = isAdmin ? adminComplaintSchema : complaintSchema;
-  const router = useRouter();
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
+    //@ts-ignore
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues ?? {
       title: "",
@@ -51,6 +53,7 @@ export function ComplaintForm({
 
   return (
     <form
+      //@ts-ignore
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-2 mx-auto max-w-2xl p-6 ring ring-zinc-200 rounded-lg"
     >
@@ -104,8 +107,10 @@ export function ComplaintForm({
             name="status"
             data={["Pending", "In Progress", "Resolved"]}
           />
-          {errors.status && (
-            <p className="text-red-500 text-xs">{errors.status.message}</p>
+          {(errors as any).status && (
+            <p className="text-red-500 text-xs">
+              {(errors as any).status.message}
+            </p>
           )}
         </div>
       )}
@@ -122,9 +127,7 @@ export function ComplaintForm({
           <p className="text-red-500 text-xs">{errors.description.message}</p>
         )}
       </div>
-      <Button className="w-full" type="submit">
-        Submit
-      </Button>
+      <SubmitButton loading={loading} text="Submit" />
     </form>
   );
 }

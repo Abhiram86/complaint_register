@@ -4,15 +4,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema as formSchema } from "@/lib/formSchemas";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user";
+import { useState } from "react";
+import SubmitButton from "../SubmitButton";
 
 export function LoginForm() {
   const router = useRouter();
   const { setUser } = useUserStore();
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -26,14 +28,21 @@ export function LoginForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(values),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setUser(data.user);
-      router.push("/");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify(values),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+        router.push("/");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -66,9 +75,7 @@ export function LoginForm() {
           <p className="text-red-500 text-xs">{errors.password.message}</p>
         )}
       </div>
-      <Button className="w-full" type="submit">
-        Login
-      </Button>
+      <SubmitButton text="Login" loading={loading} />
       <p className="text-center text-xs">
         Don&apos;t have an account?{" "}
         <span>
