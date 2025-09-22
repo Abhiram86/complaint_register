@@ -9,7 +9,6 @@ import {
   priorities,
 } from "@/lib/formSchemas";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import { SelectList } from "../SelectList";
@@ -40,7 +39,7 @@ export function ComplaintForm({
     control,
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
-    //@ts-ignore
+    //@ts-expect-error
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues ?? {
       title: "",
@@ -53,7 +52,7 @@ export function ComplaintForm({
 
   return (
     <form
-      //@ts-ignore
+      //@ts-expect-error
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-2 mx-auto max-w-2xl p-6 ring ring-zinc-200 rounded-lg"
     >

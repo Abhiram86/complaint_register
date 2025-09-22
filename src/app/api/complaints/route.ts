@@ -85,6 +85,7 @@ export async function GET(req: NextRequest) {
         },
       },
     ];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const complaints = await Complaint.aggregate(pipeline as any);
 
     return NextResponse.json({ complaints }, { status: 200 });

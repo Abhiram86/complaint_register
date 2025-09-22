@@ -17,6 +17,7 @@ export default function SubmitButton({
       disabled={loading}
       className={`w-full flex gap-2 ${className}`}
       type="submit"
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       variant={(variant as any) ?? "default"}
     >
       <p>{text}</p>

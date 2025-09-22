@@ -13,6 +13,7 @@ import { Controller } from "react-hook-form";
 interface SelectListProps extends SelectProps {
   title: string;
   name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: any;
   data: string[];
 }
@@ -25,7 +26,6 @@ export function SelectList({
   ...props
 }: SelectListProps) {
   return (
-    // @ts-ignore
     <Controller
       control={control}
       name={name}

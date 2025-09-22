@@ -6,6 +6,7 @@ export function RadioList({
   name,
   data,
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: any;
   name: string;
   data: string[];
