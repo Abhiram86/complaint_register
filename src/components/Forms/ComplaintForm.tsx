@@ -39,7 +39,7 @@ export function ComplaintForm({
     control,
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
-    //@ts-expect-error
+    //@ts-expect-error resolver error
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues ?? {
       title: "",
@@ -52,7 +52,7 @@ export function ComplaintForm({
 
   return (
     <form
-      //@ts-expect-error
+      //@ts-expect-error onSubmit
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-2 mx-auto max-w-2xl p-6 ring ring-zinc-200 rounded-lg"
     >
