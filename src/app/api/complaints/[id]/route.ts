@@ -114,7 +114,7 @@ export async function DELETE(
 ) {
   const { id } = await params;
   await connectDB();
-  const token = (await cookies()).get("token")?.value;
+  const token = (await headers()).get("authorization")?.split(" ")[1];
   if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
