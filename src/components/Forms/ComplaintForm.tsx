@@ -106,6 +106,7 @@ export function ComplaintForm({
             name="status"
             data={["Pending", "In Progress", "Resolved"]}
           />
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {(errors as any).status && (
             <p className="text-red-500 text-xs">
               {(errors as any).status.message}
