@@ -23,7 +23,7 @@ export default async function Dashboard({
 }) {
   const filters = await searchParams;
   const res = await fetch(
-    `http://localhost:3000/api/complaints${`?${new URLSearchParams(
+    `https://complaint-register-jet.vercel.app/api/complaints${`?${new URLSearchParams(
       filters
     ).toString()}`}`,
     {

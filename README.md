@@ -131,7 +131,7 @@ Admin dashboard showing all complaints in a table with options to filter, update
 
 You can deploy on:
 
-- **Frontend**: [Vercel](#)
+- **Frontend**: [Vercel](https://complaint-register-jet.vercel.app/)
 
 ---
 
@@ -142,6 +142,6 @@ You can deploy on:
 - [x] Clean and responsive UI
 - [x] Git workflow with commits, branches, PRs
 - [x] JWT authentication (optional)
-- [?] Live deployment link
+- [x] Live deployment link
 
 ---

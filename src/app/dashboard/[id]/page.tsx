@@ -9,9 +9,12 @@ export default async function Edit({
   params: Promise<{ id: string }>;
 }) {
   const param = await params;
-  const res = await fetch(`http://localhost:3000/api/complaints/${param.id}`, {
-    headers: await headers(),
-  });
+  const res = await fetch(
+    `https://complaint-register-jet.vercel.app/api/complaints/${param.id}`,
+    {
+      headers: await headers(),
+    }
+  );
   if (res.status === 401) redirect("/login");
   if (res.status === 403) {
     redirect("/");

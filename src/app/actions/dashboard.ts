@@ -3,9 +3,12 @@
 import { revalidateTag } from "next/cache";
 
 export async function handleDeleteComplaint(id: string) {
-  const res = await fetch(`http://localhost:3000/api/complaints/${id}`, {
-    method: "DELETE",
-  });
+  const res = await fetch(
+    `https://complaint-register-jet.vercel.app/api/complaints/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
   if (res.ok) {
     revalidateTag("complaints");
   }
