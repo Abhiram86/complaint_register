@@ -10,22 +10,16 @@ export const categories = [
 export const priorities = ["Low", "Medium", "High"];
 
 export const complaintSchema = z.object({
-  title: z.string().min(3, {
-    message: "Title is required.",
-  }),
-  description: z.string().min(4, {
-    message: "Description is required.",
-  }),
+  title: z.string().min(3, { message: "Title is required." }),
+  description: z.string().min(4, { message: "Description is required." }),
   category: z
-    .enum(categories as [string, ...string[]], {
-      errorMap: () => ({ message: "A category must be selected" }),
-    })
-    .default("Product"),
+    .enum(categories as [string, ...string[]])
+    .default("Product")
+    .refine((val) => !!val, { message: "A category must be selected" }),
   priority: z
-    .enum(priorities as [string, ...string[]], {
-      errorMap: () => ({ message: "A priority must be selected" }),
-    })
-    .default("Low"),
+    .enum(priorities as [string, ...string[]])
+    .default("Low")
+    .refine((val) => !!val, { message: "A priority must be selected" }),
 });
 
 export const adminComplaintSchema = complaintSchema.extend({
